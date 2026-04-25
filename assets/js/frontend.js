@@ -48,10 +48,8 @@
 		    const data = await analyze( url );
 		    console.log( 'Data received:', data );
 		    renderResults( { results, tbody, canvas, error }, data );
-		    chartInstance = renderChart( canvas, data, chartInstance );
-		    console.log( 'Before setState done' );
-		    setState( { button, results, error, loading }, 'done' );
-		    console.log( 'After setState done' );
+		    setState( { button, results, error, loading }, 'done' );  // ← prima
+    		    chartInstance = renderChart( canvas, data, chartInstance );
 		} catch ( err ) {
 		    console.error( 'Error:', err );
 		    showError( error, err.message );
@@ -136,6 +134,9 @@
     /** Render or update the Chart.js doughnut chart */
     function renderChart( canvas, data, existing ) {
         if ( existing ) existing.destroy();
+
+	console.log( 'Canvas element:', canvas );
+	console.log( 'Data for chart:', data.stats.map( s => s.impatto_totale ) );
 
         const labels = data.stats.map( s => {
             const cat = CATEGORIES.find( c => c.key === s.categoria );

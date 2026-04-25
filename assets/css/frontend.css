@@ -82,6 +82,10 @@
     padding: 0.5rem 0;
 }
 
+.aha-loading.is-visible {
+    display: flex;
+}
+
 .aha-spinner {
     display: inline-block;
     width: 20px;
