@@ -24,6 +24,15 @@ import sys
 import importlib
 from pathlib import Path
 
+# Usa il Python del venv se disponibile
+import os
+SCRIPTS_DIR = Path(__file__).parent
+VENV_PYTHON = SCRIPTS_DIR / "venv/bin/python3"
+
+if VENV_PYTHON.exists() and sys.executable != str(VENV_PYTHON):
+    # Rilancia lo script usando il Python del venv
+    os.execv(str(VENV_PYTHON), [str(VENV_PYTHON)] + sys.argv)
+
 # Aggiunge la cartella scripts/ al path così Python trova i moduli
 sys.path.insert(0, str(Path(__file__).parent))
 
