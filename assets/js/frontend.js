@@ -185,7 +185,7 @@
 
     /** UI state machine */
     function setState( { button, results, error, loading }, state ) {
-        loading.hidden = state !== 'loading';
+        loading.classList.toggle('is-visible', state === 'loading');
         button.disabled = state === 'loading';
 
         if ( state === 'done' ) {

@@ -32,7 +32,7 @@ class Rest_Api {
                     'type'              => 'string',
                     'format'            => 'uri',
                     'sanitize_callback' => 'esc_url_raw',
-                    'validate_callback' => [ $this, 'validate_facebook_url' ],
+                    //'validate_callback' => [ $this, 'validate_facebook_url' ],
                 ],
             ],
         ] );
