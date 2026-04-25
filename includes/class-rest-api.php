@@ -71,7 +71,7 @@ class Rest_Api {
         }
 
         $escaped_url = escapeshellarg( $url );
-        $cmd         = "python3 {$script} {$escaped_url} 2>&1";
+        $cmd = "python3 {$script} {$escaped_url} 2>/dev/null";
 
         // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.system_calls_exec
         exec( $cmd, $output, $exit_code );

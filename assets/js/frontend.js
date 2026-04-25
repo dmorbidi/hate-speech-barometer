@@ -45,14 +45,18 @@
             setState( { button, results, error, loading }, 'loading' );
 
             try {
-                const data = await analyze( url );
-                renderResults( { results, tbody, canvas, error }, data );
-                chartInstance = renderChart( canvas, data, chartInstance );
-                setState( { button, results, error, loading }, 'done' );
-            } catch ( err ) {
-                showError( error, err.message );
-                setState( { button, results, error, loading }, 'error' );
-            }
+		    const data = await analyze( url );
+		    console.log( 'Data received:', data );
+		    renderResults( { results, tbody, canvas, error }, data );
+		    chartInstance = renderChart( canvas, data, chartInstance );
+		    console.log( 'Before setState done' );
+		    setState( { button, results, error, loading }, 'done' );
+		    console.log( 'After setState done' );
+		} catch ( err ) {
+		    console.error( 'Error:', err );
+		    showError( error, err.message );
+		    setState( { button, results, error, loading }, 'error' );
+		}
         } );
 
         // Allow Enter key in input
@@ -185,25 +189,25 @@
 
     /** UI state machine */
     function setState( { button, results, error, loading }, state ) {
-        loading.classList.toggle('is-visible', state === 'loading');
-        button.disabled = state === 'loading';
+	    loading.classList.toggle( 'is-visible', state === 'loading' );
+	    button.disabled = state === 'loading';
 
-        if ( state === 'done' ) {
-            results.hidden = false;
-            error.hidden   = true;
-        }
-        if ( state === 'error' ) {
-            results.hidden = true;
-        }
-        if ( state === 'loading' ) {
-            error.hidden = true;
-        }
-    }
+	    if ( state === 'done' ) {
+		results.classList.add( 'is-visible' );
+		error.hidden = true;
+	    }
+	    if ( state === 'error' ) {
+		results.classList.remove( 'is-visible' );
+	    }
+	    if ( state === 'loading' ) {
+		error.hidden = true;
+	    }
+	}
 
-    function showError( el, msg ) {
-        el.textContent = msg;
-        el.hidden = false;
-    }
+	function showError( el, msg ) {
+	    el.textContent = msg;
+	    el.hidden = false;
+	}
 
     function escHtml( str ) {
         return String( str )
