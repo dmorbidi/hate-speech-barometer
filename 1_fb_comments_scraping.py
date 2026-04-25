@@ -41,19 +41,19 @@ def run(post_url: str) -> list:
     Returns:
         Lista di dict con chiavi: postTitle, text, likesCount, facebookUrl
     """
-    if os.getenv("AHA_TEST_MODE") == "1":
+    if os.getenv("HSA_TEST_MODE") == "1":
         return _load_from_file()
     return _fetch_from_apify(post_url)
 
 
 def _load_from_file() -> list:
     """Carica i commenti dal file JSON locale (modalità test)."""
-    test_file = Path(os.getenv("AHA_TEST_FILE", DEFAULT_TEST_FILE))
+    test_file = Path(os.getenv("HSA_TEST_FILE", DEFAULT_TEST_FILE))
 
     if not test_file.exists():
         raise FileNotFoundError(
             f"File di test non trovato: {test_file}\n"
-            f"Imposta AHA_TEST_FILE con il percorso corretto."
+            f"Imposta HSA_TEST_FILE con il percorso corretto."
         )
 
     with open(test_file, encoding="utf-8") as f:

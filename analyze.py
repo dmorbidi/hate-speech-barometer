@@ -11,8 +11,8 @@ Uso:
 
 Variabili d'ambiente:
     APIFY_TOKEN    Token Apify (richiesto in modalità produzione)
-    AHA_TEST_MODE  Impostare a "1" per usare il file JSON locale
-    AHA_TEST_FILE  Percorso del file JSON di test
+    HSA_TEST_MODE  Impostare a "1" per usare il file JSON locale
+    HSA_TEST_FILE  Percorso del file JSON di test
                    (default: scripts/estrazione_amnesty.json)
 
 IMPORTANTE: questo script stampa SOLO JSON su stdout.

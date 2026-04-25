@@ -49,11 +49,11 @@ export APIFY_TOKEN="your_apify_token_here"
 
 # Test mode — set to "1" to use local JSON file instead of calling Apify
 # Recommended during development to avoid unnecessary API calls
-export AHA_TEST_MODE="1"
+export HSA_TEST_MODE="1"
 
 # Path to the local test JSON file (optional)
 # Default: scripts/estrazione_amnesty.json
-export AHA_TEST_FILE="/path/to/your/file.json"
+export HSA_TEST_FILE="/path/to/your/file.json"
 ```
 
 > **Security:** never commit your Apify token to the repository.
