@@ -24,17 +24,21 @@ import sys
 import importlib
 from pathlib import Path
 
-# Usa il Python del venv se disponibile
-import os
+# ── Aggiunge i pacchetti del venv a sys.path ──────────────────────────────────
+# Funziona sia da Ubuntu che dal container Devilbox perché usa
+# percorsi relativi al file, non percorsi assoluti del venv.
 SCRIPTS_DIR = Path(__file__).parent
-VENV_PYTHON = SCRIPTS_DIR / "venv/bin/python3"
+VENV_SITE_PACKAGES = SCRIPTS_DIR / "venv/lib"
 
-if VENV_PYTHON.exists() and sys.executable != str(VENV_PYTHON):
-    # Rilancia lo script usando il Python del venv
-    os.execv(str(VENV_PYTHON), [str(VENV_PYTHON)] + sys.argv)
+if VENV_SITE_PACKAGES.exists():
+    for py_dir in VENV_SITE_PACKAGES.iterdir():
+        site_pkg = py_dir / "site-packages"
+        if site_pkg.exists():
+            sys.path.insert(0, str(site_pkg))
+            break
 
-# Aggiunge la cartella scripts/ al path così Python trova i moduli
-sys.path.insert(0, str(Path(__file__).parent))
+# ── Aggiunge la cartella scripts/ al path così Python trova i moduli ──────────
+sys.path.insert(0, str(SCRIPTS_DIR))
 
 scraping   = importlib.import_module("1_fb_comments_scraping")
 analysis   = importlib.import_module("2_comments_hate_analysis")

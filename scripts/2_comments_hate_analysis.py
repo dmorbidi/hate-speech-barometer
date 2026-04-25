@@ -1,27 +1,15 @@
-"""
-2_comments_hate_analysis.py
-───────────────────────────
-Classifica i commenti Facebook con il modello HuggingFace
-IMSyPP/hate_speech_it, assegnando a ciascuno una categoria
-e un livello di confidenza.
-
-Utilizzo standalone:
-    python3 2_comments_hate_analysis.py estrazione_amnesty.json
-
-Utilizzo come modulo:
-    from 2_comments_hate_analysis import run
-    df = run(comments)   # comments: list[dict] → pd.DataFrame
-"""
-
 import json
 import sys
-
+import os
+from pathlib import Path
 import pandas as pd
 from transformers import pipeline
 
+# Cache persistente per il modello HuggingFace
+# Punta a scripts/.cache/ — funziona sia da Ubuntu che dal container
+os.environ["TRANSFORMERS_CACHE"] = str(Path(__file__).parent / ".cache")
 
-# ── Configurazione ────────────────────────────────────────────────────────────
-
+# ── Configurazione ─────────────────────────────────────────────────
 MODEL_ID = "IMSyPP/hate_speech_it"
 
 MAPPING_UFFICIALE = {

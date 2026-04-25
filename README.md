@@ -31,12 +31,18 @@ npm run build
 
 ### 3. Set up the Python environment
 
+The venv must be created inside the `scripts/` folder so that `analyze.py` can find it automatically.
+
 ```bash
 cd scripts/
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 ```
+
+> **Note on the AI model:** The HuggingFace model (`IMSyPP/hate_speech_it`) is downloaded automatically the first time you run the pipeline and cached in `~/.cache/huggingface/`. It is not part of the venv and does not need to be reinstalled.
+
+> **Note on the venv:** Never commit the `venv/` folder — it is already in `.gitignore`. Each user must recreate it locally after cloning.
 
 ### 4. Configure environment variables
 
@@ -47,7 +53,7 @@ Add the following to your environment (`~/.bashrc`, `~/.zshrc`, or your server c
 # Get yours at: https://console.apify.com/account/integrations
 export APIFY_TOKEN="your_apify_token_here"
 
-# Test mode — set to "1" to use local JSON file instead of calling Apify
+# Test mode — set to "1" to use a local JSON file instead of calling Apify
 # Recommended during development to avoid unnecessary API calls
 export HSA_TEST_MODE="1"
 
@@ -57,11 +63,10 @@ export HSA_TEST_FILE="/path/to/your/file.json"
 ```
 
 > **Security:** never commit your Apify token to the repository.
-> Add `.env` to `.gitignore` if you use an env file.
 
 ### 5. Activate the plugin
 
-Go to **WP Admin → Plugins** and activate *Hate Speech Analyzer*.
+Go to **WP Admin → Network Admin → Plugins** and activate *Hate Speech Analyzer*.
 
 ## Usage
 
@@ -84,11 +89,15 @@ Three scripts chained in memory — no temporary files written to disk:
 analyze.py                   → WordPress entry point, outputs JSON to stdout
 ```
 
-Each script can also be run standalone:
+Each script can also be run standalone for testing:
 
 ```bash
-# Test scraping (test mode)
-export AHA_TEST_MODE=1
+cd scripts/
+source venv/bin/activate
+
+# Test scraping (test mode — no Apify calls)
+export HSA_TEST_MODE=1
+export HSA_TEST_FILE=/path/to/estrazione_amnesty.json
 python3 1_fb_comments_scraping.py "https://www.facebook.com/.../posts/..."
 
 # Test classification
