@@ -1,0 +1,33 @@
+/* Editor preview for the Hate Analyzer block */
+.aha-editor-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: #000;
+    border: 2px dashed #ffff00;
+    border-radius: 4px;
+    text-align: center;
+    min-height: 120px;
+}
+
+.aha-editor-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.aha-editor-label {
+    color: #ffff00;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin: 0 0 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.aha-editor-description {
+    color: #ccc;
+    font-size: 0.875rem;
+    margin: 0;
+}

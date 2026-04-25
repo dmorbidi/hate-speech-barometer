@@ -1,0 +1,21 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "dmorbidi/hate-analyzer",
+    "version": "1.0.0",
+    "title": "Hate Analyzer",
+    "category": "widgets",
+    "icon": "chart-pie",
+    "description": "Analyzes hate speech in Facebook post comments using AI.",
+    "keywords": [ "hate", "speech", "analysis", "facebook", "AI" ],
+    "textdomain": "hate-speech-analyzer",
+    "editorScript": "file:./index.js",
+    "editorStyle":  "file:./editor.css",
+    "style":        "file:../assets/css/frontend.css",
+    "supports": {
+        "html":       false,
+        "align":      [ "wide", "full" ],
+        "color":      false,
+        "typography": false
+    }
+}
