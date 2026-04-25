@@ -29,7 +29,7 @@ require_once HSA_PLUGIN_DIR . 'includes/class-rest-api.php';
  * Register the Gutenberg block and enqueue assets.
  */
 function register_block(): void {
-    register_block_type( HSA_PLUGIN_DIR . 'src/block.json', [
+    register_block_type( HSA_PLUGIN_DIR . 'build/block.json', [
         'render_callback' => __NAMESPACE__ . '\\render_block',
     ] );
 
@@ -72,7 +72,7 @@ function enqueue_frontend_assets(): void {
     );
 
     wp_localize_script( 'aha-frontend', 'ahaData', [
-        'restUrl' => rest_url( 'hate-analyzer/v1/analyze' ),
+        'restUrl' => rest_url( 'hate-speech-analyzer/v1/analyze' ),
         'nonce'   => wp_create_nonce( 'wp_rest' ),
     ] );
 }
