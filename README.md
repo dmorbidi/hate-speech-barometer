@@ -1,14 +1,27 @@
-# Hate Speech Analyzer
+# Hate Speech Barometer
 
-WordPress plugin that adds a Gutenberg block for analysing hate speech in Facebook post comments. Designed to work with the [Humanity Theme](https://github.com/amnestywebsite/humanity-theme) by Amnesty International.
+A WordPress plugin that adds a Gutenberg block for analysing hate speech in Facebook post comments. Designed to work with the [Humanity Theme](https://github.com/amnestywebsite/humanity-theme) by Amnesty International.
 
-> **Note:** This is an independent open-source project, not affiliated with or endorsed by Amnesty International.
+> **Note:** This is an independent open-source project developed by a volunteer member of the [Amnesty International Italia Hate Speech Task Force](https://www.amnesty.it). It is not an official Amnesty International product or service.
+
+---
+
+## ⚠️ Privacy & GDPR Notice
+
+This tool retrieves and processes publicly available Facebook comments. Comments may contain personal data including usernames and profile information.
+
+- **Users are solely responsible** for ensuring their use of this tool complies with applicable privacy regulations, including GDPR.
+- **Do not commit** any dataset containing real user data to public repositories.
+- The `scripts/estrazione_amnesty.json` test file is excluded from this repository via `.gitignore`. If you use a local test file, ensure it does not contain identifiable personal data before sharing it.
+- This tool is intended for research and human rights monitoring purposes only, in line with the legitimate interest provisions of GDPR Article 6(1)(f).
+
+---
 
 ## Requirements
 
 - WordPress 6.4+
 - PHP 8.2+
-- Python 3.10+
+- Python 3.9+ (must match the Python version used by your server environment)
 - Node.js 20+ (only for block compilation)
 - [Humanity Theme](https://github.com/amnestywebsite/humanity-theme)
 
@@ -31,16 +44,16 @@ npm run build
 
 ### 3. Set up the Python environment
 
-The venv must be created inside the `scripts/` folder so that `analyze.py` can find it automatically.
+The venv must be created inside the `scripts/` folder so that `analyze.py` can find it automatically. Use the same Python version as your server environment to avoid binary incompatibility (e.g. numpy C-extensions).
 
 ```bash
 cd scripts/
-python3 -m venv venv
+python3.9 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-> **Note on the AI model:** The HuggingFace model (`IMSyPP/hate_speech_it`) is downloaded automatically the first time you run the pipeline and cached in `~/.cache/huggingface/`. It is not part of the venv and does not need to be reinstalled.
+> **Note on the AI model:** The HuggingFace model (`IMSyPP/hate_speech_it`) is downloaded automatically the first time you run the pipeline and cached in `scripts/.cache/`. It is not part of the venv and does not need to be reinstalled. The cache folder is excluded from the repository via `.gitignore`.
 
 > **Note on the venv:** Never commit the `venv/` folder — it is already in `.gitignore`. Each user must recreate it locally after cloning.
 
@@ -59,21 +72,23 @@ export HSA_TEST_MODE="1"
 
 # Path to the local test JSON file (optional)
 # Default: scripts/estrazione_amnesty.json
-export HSA_TEST_FILE="/path/to/your/file.json"
+export HSA_TEST_FILE="/path/to/your/anonymized_file.json"
 ```
 
 > **Security:** never commit your Apify token to the repository.
 
 ### 5. Activate the plugin
 
-Go to **WP Admin → Network Admin → Plugins** and activate *Hate Speech Analyzer*.
+Go to **WP Admin → Network Admin → Plugins** and activate *Hate Speech Barometer*.
+
+> **Note:** Theme Options are accessible via **WP Admin → `admin.php?page=amnesty_theme_options_page`**. This is a known limitation of the Humanity Theme in multisite environments — the menu entry does not appear automatically in the single site dashboard.
 
 ## Usage
 
 1. Create or edit any WordPress page
-2. Add the **Hate Speech Analyzer** block (find it in the block inserter)
+2. Add the **Hate Speech Barometer** block (find it in the block inserter under *Widgets*)
 3. Publish the page
-4. On the frontend, paste a Facebook post URL and click **Analyze**
+4. On the frontend, paste the URL of any public Facebook post and click **Analyze**
 
 ## Python pipeline
 
@@ -97,11 +112,11 @@ source venv/bin/activate
 
 # Test scraping (test mode — no Apify calls)
 export HSA_TEST_MODE=1
-export HSA_TEST_FILE=/path/to/estrazione_amnesty.json
+export HSA_TEST_FILE=/path/to/anonymized_file.json
 python3 1_fb_comments_scraping.py "https://www.facebook.com/.../posts/..."
 
 # Test classification
-python3 2_comments_hate_analysis.py estrazione_amnesty.json
+python3 2_comments_hate_analysis.py anonymized_file.json
 
 # Test KPI calculation
 python3 3_post_hate_evaluation.py analisi_odio_con_consenso.csv
@@ -152,6 +167,16 @@ python3 analyze.py "https://www.facebook.com/.../posts/..."
     ]
 }
 ```
+
+## Known Limitations
+
+This is a proof-of-concept prototype with the following limitations:
+
+- Analyzes one Facebook post at a time
+- The AI model (`IMSyPP/hate_speech_it`) is optimized for Italian language content
+- Requires a local server environment (not production-ready)
+- Apify free tier has usage limits — use test mode for development
+- The plugin requires Python 3.9 to match Devilbox container environment
 
 ## Development
 
