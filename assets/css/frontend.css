@@ -5,20 +5,21 @@
 
 .aha-block {
     --aha-black:        #000000;
+    --aha-grey:         #f5f5f5;
     --aha-yellow:       #ffff00;
     --aha-white:        #ffffff;
     --aha-acceptable:   #22c55e;   /* green  */
     --aha-inappropriate:#eab308;   /* amber  */
     --aha-offensive:    #f97316;   /* orange */
     --aha-violent:      #ef4444;   /* red    */
-    --aha-border:       #333333;
+    --aha-border:       #000000;   /*#333333;*/
     --aha-radius:       4px;
 
     font-family: inherit;
-    background: var(--aha-black);
-    color: var(--aha-white);
+    background: var(--aha-grey);
+    color: #111111; /* var(--aha-white); */
     padding: 2rem;
-    border-top: 4px solid var(--aha-yellow);
+    border-top: 4px solid var(--aha-black);
     margin: 2rem 0;
 }
 
@@ -32,22 +33,22 @@
 
 .aha-url-input {
     flex: 1 1 280px;
-    background: #111;
+    background: #ffffff;
     border: 1px solid var(--aha-border);
     border-radius: var(--aha-radius);
-    color: var(--aha-white);
+    color: #111111; /*var(--aha-white);*/
     font-size: 1rem;
     padding: 0.75rem 1rem;
     transition: border-color 0.2s;
 }
 
 .aha-url-input:focus {
-    border-color: var(--aha-yellow);
+    border-color: var(--aha-black);
     outline: none;
 }
 
 .aha-url-input::placeholder {
-    color: #666;
+    color: #999;
 }
 
 .aha-submit {
@@ -150,7 +151,7 @@
 }
 
 .aha-post-title strong {
-    color: var(--aha-yellow);
+    color: #111111; /*var(--aha-yellow);*/
 }
 
 /* ---------- Table --------------------------------------------------------- */
@@ -161,7 +162,7 @@
 }
 
 .aha-table th {
-    color: var(--aha-yellow);
+    color: #111111; /*var(--aha-yellow);*/
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.06em;
@@ -172,6 +173,7 @@
 }
 
 .aha-table td {
+    color: #111111;
     padding: 0.6rem 0.75rem;
     border-bottom: 1px solid #1a1a1a;
     vertical-align: middle;
@@ -222,7 +224,7 @@
     height: 6px;
     border-radius: 3px;
     flex: 1;
-    background: #222;
+    background: #e0e0e0;
     overflow: hidden;
 }
 
@@ -234,7 +236,29 @@
 
 .aha-impact-value {
     font-size: 0.8rem;
-    color: #ccc;
+    color: #444444;
     min-width: 3.5rem;
     text-align: right;
+}
+
+.aha-dominant {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 1rem 0 0.5rem;
+    border-top: 1px solid #ddd;
+    margin-top: 0.5rem;
+}
+
+.aha-dominant-pct {
+    font-size: 3rem;
+    font-weight: 700;
+    display: block;
+    line-height: 1;
+}
+
+.aha-dominant-label {
+    font-size: 0.9rem;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
 }

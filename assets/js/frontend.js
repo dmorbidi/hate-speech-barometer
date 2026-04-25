@@ -129,6 +129,23 @@
             `;
             tbody.appendChild( tr );
         } );
+        
+        // Indicatore categoria dominante
+	const total = data.stats.reduce( ( a, b ) => a + b.impatto_totale, 0 );
+	const dominant = data.stats.reduce( ( a, b ) => a.impatto_totale > b.impatto_totale ? a : b );
+	const pctDominant = total > 0 ? ( dominant.impatto_totale / total * 100 ).toFixed(1) : 0;
+	const domCat = CATEGORIES.find( c => c.key === dominant.categoria );
+
+	let indicator = results.querySelector( '.aha-dominant' );
+	if ( ! indicator ) {
+	    indicator = document.createElement( 'div' );
+	    indicator.className = 'aha-dominant';
+	    results.appendChild( indicator );
+	}
+	indicator.innerHTML = `
+	    <span class="aha-dominant-pct" style="color:${ domCat.color };">${ pctDominant }%</span>
+	    <span class="aha-dominant-label">${ domCat.label }</span>
+	`;
     }
 
     /** Render or update the Chart.js doughnut chart */
@@ -167,7 +184,7 @@
                     legend: {
                         position:   'bottom',
                         labels: {
-                            color:      '#fff',
+                            color:      '#111',
                             padding:    16,
                             font:       { size: 12 },
                             boxWidth:   14,
