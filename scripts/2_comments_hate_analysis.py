@@ -46,7 +46,7 @@ def run(comments: list) -> pd.DataFrame:
         comments: list of dicts with keys postTitle, text, likesCount, facebookUrl
 
     Returns:
-        DataFrame with original columns plus 'categoria' and 'confidenza'
+        DataFrame with original columns plus 'categoria' (category) and 'confidenza' (precision)
     """
     df = pd.DataFrame(comments)
 

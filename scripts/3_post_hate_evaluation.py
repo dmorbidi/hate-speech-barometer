@@ -10,11 +10,11 @@ Impact score formula:
     based on the AI confidence score alone.
 
 KPIs aggregated per category:
-    impatto_totale = Σ impact_score
-    impatto_medio  = impatto_totale / n_commenti
+    impatto_totale (total impact) = Σ impact_score
+    impatto_medio  (average impact) = impatto_totale / n_commenti
 
 Standalone usage:
-    python3 3_post_hate_evaluation.py analisi_odio_con_consenso.csv
+    python3 3_post_hate_evaluation.py <classified_comments.csv>
 
 Module usage:
     from 3_post_hate_evaluation import run
