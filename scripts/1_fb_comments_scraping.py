@@ -26,7 +26,12 @@ from pathlib import Path
 
 APIFY_ACTOR_ID  = "apify/facebook-comments-scraper"
 RESULTS_LIMIT   = 50
-DEFAULT_TEST_FILE = Path(__file__).parent / "estrazione_amnesty.json"
+
+# Default test file path — used only when running this script standalone
+# (i.e. without HSB_TEST_FILE environment variable set).
+# In production, HSB_TEST_FILE in wp-config.php takes precedence.
+# Ensure this file is anonymized before committing to any public repository.
+DEFAULT_TEST_FILE = Path(__file__).parent / "anonymized_dataset_sample.json"
 
 
 # ── Core ──────────────────────────────────────────────────────────────────────
