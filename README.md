@@ -23,7 +23,6 @@ This tool retrieves and processes publicly available Facebook comments. Comments
 - PHP 8.2+
 - Python 3.9+ (must match the Python version used by your server environment)
 - Node.js 20+ (only for block compilation)
-- [Humanity Theme](https://github.com/amnestywebsite/humanity-theme)
 
 ---
 
@@ -50,10 +49,12 @@ The venv must be created inside the `scripts/` folder so that `analyze.py` can f
 
 ```bash
 cd scripts/
-python3.9 -m venv venv
+python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 ```
+
+> **Note on Python version:** The venv must use the same Python version as your server environment to avoid binary incompatibility with compiled packages such as numpy. This project was developed and tested with Python 3.9 inside a Devilbox container. If you encounter import errors related to numpy or pandas, ensure your venv Python version matches your server's Python version.
 
 > **Note on the AI model:** The HuggingFace model (`IMSyPP/hate_speech_it`) is downloaded automatically the first time you run the pipeline and cached in `scripts/.cache/`. It is not part of the venv and does not need to be reinstalled. The cache folder is excluded from the repository via `.gitignore`.
 
@@ -204,7 +205,7 @@ This is a proof-of-concept prototype. The following limitations are acknowledged
 
 - **Nested comments flattened** — Replies to comments are retrieved but treated as top-level comments, losing the conversational hierarchy. *Solvable by preserving the parent-child relationship in the data model and weighting nested replies accordingly.*
 
-- **Comment limit** — By default, only the latest 50 comments are retrieved per post. *Configurable via the `resultsLimit` parameter in `1_fb_comments_scraping.py`. A production version would expose this as a user-facing setting.*
+- **Comment limit** — By default, only the latest 50 comments (plus nested comments/replies up to 3 levels) are retrieved per post. *Configurable via the `resultsLimit` parameter in `1_fb_comments_scraping.py`. A production version would expose this as a user-facing setting.*
 
 - **Local environment only** — The WordPress instance runs on a local development server. However, the comment scraping pipeline calls real external services (Apify) and processes actual Facebook data. Deploying to a production server would require minimal configuration changes.
 
