@@ -1,18 +1,18 @@
 """
 1_fb_comments_scraping.py
 ─────────────────────────
-Recupera i commenti di un post Facebook tramite Apify.
+Fetches comments from a Facebook post via Apify.
 
-MODALITÀ TEST:  imposta HSB_TEST_MODE=1
-                Legge il file JSON locale invece di chiamare Apify.
+TEST MODE:  set HSB_TEST_MODE=1
+            Reads a local JSON file instead of calling Apify.
 
-MODALITÀ PROD:  richiede la variabile d'ambiente APIFY_TOKEN.
-                Vedere README per le istruzioni di configurazione.
+PRODUCTION MODE:  requires the APIFY_TOKEN environment variable.
+                  See README for configuration instructions.
 
-Utilizzo standalone:
+Standalone usage:
     python3 1_fb_comments_scraping.py <facebook_post_url>
 
-Utilizzo come modulo:
+Module usage:
     from 1_fb_comments_scraping import run
     comments = run(url)   # → list[dict]
 """
@@ -22,7 +22,7 @@ import os
 import sys
 from pathlib import Path
 
-# ── Configurazione ────────────────────────────────────────────────────────────
+# ── Configuration ─────────────────────────────────────────────────────────────
 
 APIFY_ACTOR_ID  = "apify/facebook-comments-scraper"
 RESULTS_LIMIT   = 50
@@ -38,13 +38,13 @@ DEFAULT_TEST_FILE = Path(__file__).parent / "anonymized_dataset_sample.json"
 
 def run(post_url: str) -> list:
     """
-    Recupera i commenti del post Facebook indicato.
+    Fetches comments from the given Facebook post.
 
-    In modalità test (HSB_TEST_MODE=1) legge da file locale.
-    In modalità produzione chiama l'API Apify.
+    In test mode (HSB_TEST_MODE=1) reads from a local file.
+    In production mode calls the Apify API.
 
     Returns:
-        Lista di dict con chiavi: postTitle, text, likesCount, facebookUrl
+        List of dicts with keys: postTitle, text, likesCount, facebookUrl
     """
     if os.getenv("HSB_TEST_MODE") == "1":
         return _load_from_file()
@@ -52,31 +52,31 @@ def run(post_url: str) -> list:
 
 
 def _load_from_file() -> list:
-    """Carica i commenti dal file JSON locale (modalità test)."""
+    """Loads comments from a local JSON file (test mode)."""
     test_file = Path(os.getenv("HSB_TEST_FILE", DEFAULT_TEST_FILE))
 
     if not test_file.exists():
         raise FileNotFoundError(
-            f"File di test non trovato: {test_file}\n"
-            f"Imposta HSB_TEST_FILE con il percorso corretto."
+            f"Test file not found: {test_file}\n"
+            f"Set HSB_TEST_FILE to the correct path."
         )
 
     with open(test_file, encoding="utf-8") as f:
         data = json.load(f)
 
-    print(f"Modalità test: caricati {len(data)} commenti da {test_file}", file=sys.stderr)
+    print(f"Test mode: loaded {len(data)} comments from {test_file}", file=sys.stderr)
     return data
 
 
 def _fetch_from_apify(post_url: str) -> list:
-    """Chiama l'actor Apify e restituisce i commenti (modalità produzione)."""
+    """Calls the Apify actor and returns the comments (production mode)."""
     from apify_client import ApifyClient
 
     token = os.getenv("APIFY_TOKEN")
     if not token:
         raise EnvironmentError(
-            "Variabile d'ambiente APIFY_TOKEN non impostata.\n"
-            "Vedere README per le istruzioni di configurazione."
+            "APIFY_TOKEN environment variable is not set.\n"
+            "See README for configuration instructions."
         )
 
     client = ApifyClient(token)
@@ -88,12 +88,12 @@ def _fetch_from_apify(post_url: str) -> list:
         "viewOption":            "RANKED_UNFILTERED",
     }
 
-    print("Lancio dello scraper su Apify... (potrebbe volerci un minuto)", file=sys.stderr)
+    print("Launching Apify scraper... (this may take a minute)", file=sys.stderr)
 
     actor_run = client.actor(APIFY_ACTOR_ID).call(run_input=run_input)
     items = client.dataset(actor_run["defaultDatasetId"]).list_items().items
 
-    print(f"Scraping completato! ID Esecuzione: {actor_run['id']}", file=sys.stderr)
+    print(f"Scraping complete. Run ID: {actor_run['id']}", file=sys.stderr)
     return items
 
 
@@ -101,7 +101,7 @@ def _fetch_from_apify(post_url: str) -> list:
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Uso: python3 1_fb_comments_scraping.py <facebook_post_url>")
+        print("Usage: python3 1_fb_comments_scraping.py <facebook_post_url>")
         sys.exit(1)
 
     comments = run(sys.argv[1])

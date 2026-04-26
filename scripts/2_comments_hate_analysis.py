@@ -1,3 +1,18 @@
+"""
+2_comments_hate_analysis.py
+───────────────────────────
+Classifies Facebook comments using the HuggingFace model
+IMSyPP/hate_speech_it, assigning each comment a category
+and a confidence score.
+
+Standalone usage:
+    python3 2_comments_hate_analysis.py <input.json>
+
+Module usage:
+    from 2_comments_hate_analysis import run
+    df = run(comments)   # comments: list[dict] → pd.DataFrame
+"""
+
 import json
 import sys
 import os
@@ -5,14 +20,15 @@ from pathlib import Path
 import pandas as pd
 from transformers import pipeline
 
-# Cache persistente per il modello HuggingFace
-# Punta a scripts/.cache/ — funziona sia da Ubuntu che dal container
+# Persistent cache for the HuggingFace model.
+# Points to scripts/.cache/ — works both on Ubuntu and inside the Devilbox container.
 os.environ["TRANSFORMERS_CACHE"] = str(Path(__file__).parent / ".cache")
 
-# ── Configurazione ─────────────────────────────────────────────────
+# ── Configuration ─────────────────────────────────────────────────────────────
+
 MODEL_ID = "IMSyPP/hate_speech_it"
 
-MAPPING_UFFICIALE = {
+LABEL_MAP = {
     "LABEL_0": "ACCEPTABLE",
     "LABEL_1": "INAPPROPRIATE",
     "LABEL_2": "OFFENSIVE",
@@ -24,36 +40,36 @@ MAPPING_UFFICIALE = {
 
 def run(comments: list) -> pd.DataFrame:
     """
-    Classifica una lista di commenti Facebook.
+    Classifies a list of Facebook comments.
 
     Args:
-        comments: lista di dict con chiavi postTitle, text, likesCount, facebookUrl
+        comments: list of dicts with keys postTitle, text, likesCount, facebookUrl
 
     Returns:
-        DataFrame con colonne originali più 'categoria' e 'confidenza'
+        DataFrame with original columns plus 'categoria' and 'confidenza'
     """
     df = pd.DataFrame(comments)
 
-    # Convertiamo i likes in numeri interi
-    # errors='coerce' trasforma eventuali testi strani in NaN, poi a 0
+    # Convert likes to integers.
+    # errors='coerce' turns any non-numeric values into NaN, then fills with 0.
     df["likesCount"] = (
         pd.to_numeric(df["likesCount"], errors="coerce")
         .fillna(0)
         .astype(int)
     )
 
-    print("Caricamento modello...", file=sys.stderr)
+    print("Loading model...", file=sys.stderr)
     hate_classifier = pipeline(
         "text-classification",
         model=MODEL_ID,
         truncation=True,
     )
 
-    print("Analisi in corso...", file=sys.stderr)
+    print("Classifying comments...", file=sys.stderr)
 
     def analizza(testo):
         res = hate_classifier(str(testo))[0]
-        return pd.Series([MAPPING_UFFICIALE.get(res["label"]), res["score"]])
+        return pd.Series([LABEL_MAP.get(res["label"]), res["score"]])
 
     df[["categoria", "confidenza"]] = df["text"].apply(analizza)
 
@@ -64,7 +80,7 @@ def run(comments: list) -> pd.DataFrame:
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Uso: python3 2_comments_hate_analysis.py <input.json>")
+        print("Usage: python3 2_comments_hate_analysis.py <input.json>")
         sys.exit(1)
 
     with open(sys.argv[1], encoding="utf-8") as f:

@@ -1,22 +1,22 @@
 """
 3_post_hate_evaluation.py
 ─────────────────────────
-Calcola i KPI di impatto odio a partire dal DataFrame
-classificato dallo step precedente.
+Calculates hate impact KPIs from the DataFrame
+produced by the previous pipeline step.
 
-Formula impact score:
-    impact_score = confidenza × (likesCount + 1)
-    Il +1 garantisce peso minimo anche ai commenti con 0 like,
-    basato sulla certezza dell'AI.
+Impact score formula:
+    impact_score = confidence × (likesCount + 1)
+    The +1 ensures a minimum weight even for comments with 0 likes,
+    based on the AI confidence score alone.
 
-KPI aggregati per categoria:
+KPIs aggregated per category:
     impatto_totale = Σ impact_score
     impatto_medio  = impatto_totale / n_commenti
 
-Utilizzo standalone:
+Standalone usage:
     python3 3_post_hate_evaluation.py analisi_odio_con_consenso.csv
 
-Utilizzo come modulo:
+Module usage:
     from 3_post_hate_evaluation import run
     stats = run(df)   # df: pd.DataFrame → list[dict]
 """
@@ -26,7 +26,7 @@ import sys
 import pandas as pd
 
 
-# ── Configurazione ────────────────────────────────────────────────────────────
+# ── Configuration ─────────────────────────────────────────────────────────────
 
 ALL_CATEGORIES = ["ACCEPTABLE", "INAPPROPRIATE", "OFFENSIVE", "VIOLENT"]
 
@@ -35,19 +35,19 @@ ALL_CATEGORIES = ["ACCEPTABLE", "INAPPROPRIATE", "OFFENSIVE", "VIOLENT"]
 
 def run(df: pd.DataFrame) -> list:
     """
-    Calcola i KPI di impatto per categoria.
+    Calculates impact KPIs per category.
 
     Args:
-        df: DataFrame con colonne categoria, confidenza, likesCount, text
+        df: DataFrame with columns categoria, confidenza, likesCount, text
 
     Returns:
-        Lista di dict ordinata per ALL_CATEGORIES, con tutte e 4
-        le categorie sempre presenti (valori zero se assenti).
+        List of dicts ordered by ALL_CATEGORIES, with all 4 categories
+        always present (zero values for categories absent in the post).
     """
     df = df.copy()
 
-    # Formula originale: confidenza × (likes + 1)
-    # Il +1 assicura peso minimo anche ai commenti con 0 like
+    # Impact score formula: confidence × (likes + 1)
+    # The +1 ensures a minimum weight even for comments with 0 likes.
     df["impact_score"] = df["confidenza"] * (df["likesCount"] + 1)
 
     statistiche = df.groupby("categoria").agg(
@@ -67,8 +67,8 @@ def run(df: pd.DataFrame) -> list:
 
 def _ensure_all_categories(df: pd.DataFrame) -> list:
     """
-    Garantisce che tutte e 4 le categorie siano presenti nel risultato,
-    inserendo valori zero per quelle assenti nel post analizzato.
+    Ensures all 4 categories are present in the result,
+    inserting zero values for categories absent in the analysed post.
     """
     index = df.to_dict("index")
     result = []
@@ -99,20 +99,20 @@ def _ensure_all_categories(df: pd.DataFrame) -> list:
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Uso: python3 3_post_hate_evaluation.py <analisi.csv>")
+        print("Usage: python3 3_post_hate_evaluation.py <analysis.csv>")
         sys.exit(1)
 
     df = pd.read_csv(sys.argv[1])
     stats = run(df)
 
     print("\n" + "=" * 40)
-    print("📊 REPORT FINALE: TEMPERATURA DELL'ODIO")
+    print("📊 HATE SPEECH BAROMETER — FINAL REPORT")
     print("=" * 40)
     for row in stats:
         print(
             f"{row['categoria']:15} | "
-            f"commenti: {row['n_commenti']:3} | "
-            f"impatto totale: {row['impatto_totale']:8.2f} | "
-            f"impatto medio: {row['impatto_medio']:.4f}"
+            f"comments: {row['n_commenti']:3} | "
+            f"total impact: {row['impatto_totale']:8.2f} | "
+            f"avg impact: {row['impatto_medio']:.4f}"
         )
     print("=" * 40)
