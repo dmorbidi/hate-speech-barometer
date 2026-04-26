@@ -10,11 +10,11 @@ declare( strict_types=1 );
 namespace Dmorbidi\HateAnalyzer;
 
 /**
- * Registers and handles the /hate-speech-analyzer/v1/analyze endpoint.
+ * Registers and handles the /hate-speech-barometer/v1/analyze endpoint.
  */
 class Rest_Api {
 
-    private const NAMESPACE = 'hate-speech-analyzer/v1';
+    private const NAMESPACE = 'hate-speech-barometer/v1';
     private const ROUTE     = '/analyze';
 
     public function __construct() {
@@ -60,12 +60,12 @@ class Rest_Api {
      */
     public function handle_analyze( \WP_REST_Request $request ) {
         $url        = $request->get_param( 'url' );
-        $script     = HSA_SCRIPTS_DIR . 'analyze.py';
+        $script     = HSB_SCRIPTS_DIR . 'analyze.py';
 
         if ( ! file_exists( $script ) ) {
             return new \WP_Error(
                 'script_missing',
-                __( 'Analysis script not found.', 'hate-speech-analyzer' ),
+                __( 'Analysis script not found.', 'hate-speech-barometer' ),
                 [ 'status' => 500 ]
             );
         }
@@ -89,7 +89,7 @@ class Rest_Api {
         if ( json_last_error() !== JSON_ERROR_NONE ) {
             return new \WP_Error(
                 'invalid_output',
-                __( 'The analysis script returned invalid JSON.', 'hate-speech-analyzer' ),
+                __( 'The analysis script returned invalid JSON.', 'hate-speech-barometer' ),
                 [ 'status' => 500 ]
             );
         }

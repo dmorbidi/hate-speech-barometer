@@ -1,13 +1,13 @@
 <?php
 /**
- * Plugin Name: Hate Speech Analyzer
- * Plugin URI:  https://github.com/dmorbidi/hate-speech-analyzer
+ * Plugin Name: Hate Speech Barometer
+ * Plugin URI:  https://github.com/dmorbidi/hate-speech-barometer
  * Description: Analyzes hate speech in Facebook post comments using AI, designed for the Humanity Theme.
  * Version:     1.0.0
  * Author:      Dario Morbidi
  * Author URI:  https://github.com/dmorbidi
  * License:     GPL-2.0-or-later
- * Text Domain: hate-speech-analyzer
+ * Text Domain: hate-speech-barometer
  *
  * @package Dmorbidi\HateAnalyzer
  */
@@ -18,26 +18,26 @@ namespace Dmorbidi\HateAnalyzer;
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'HSA_VERSION',     '1.0.0' );
-define( 'HSA_PLUGIN_DIR',  plugin_dir_path( __FILE__ ) );
-define( 'HSA_PLUGIN_URL',  plugin_dir_url( __FILE__ ) );
-define( 'HSA_SCRIPTS_DIR', HSA_PLUGIN_DIR . 'scripts/' );
+define( 'HSB_VERSION',     '1.0.0' );
+define( 'HSB_PLUGIN_DIR',  plugin_dir_path( __FILE__ ) );
+define( 'HSB_PLUGIN_URL',  plugin_dir_url( __FILE__ ) );
+define( 'HSB_SCRIPTS_DIR', HSB_PLUGIN_DIR . 'scripts/' );
 
-require_once HSA_PLUGIN_DIR . 'includes/class-rest-api.php';
+require_once HSB_PLUGIN_DIR . 'includes/class-rest-api.php';
 
 /**
  * Register the Gutenberg block and enqueue assets.
  */
 function register_block(): void {
-    register_block_type( HSA_PLUGIN_DIR . 'build/block.json', [
+    register_block_type( HSB_PLUGIN_DIR . 'build/block.json', [
         'render_callback' => __NAMESPACE__ . '\\render_block',
     ] );
 
     wp_enqueue_style(
         'aha-frontend',
-        HSA_PLUGIN_URL . 'assets/css/frontend.css',
+        HSB_PLUGIN_URL . 'assets/css/frontend.css',
         [],
-        HSA_VERSION
+        HSB_VERSION
     );
 }
 add_action( 'init', __NAMESPACE__ . '\\register_block' );
@@ -65,14 +65,14 @@ function enqueue_frontend_assets(): void {
 
     wp_enqueue_script(
         'aha-frontend',
-        HSA_PLUGIN_URL . 'assets/js/frontend.js',
+        HSB_PLUGIN_URL . 'assets/js/frontend.js',
         [ 'chartjs' ],
-        HSA_VERSION,
+        HSB_VERSION,
         true
     );
 
     wp_localize_script( 'aha-frontend', 'ahaData', [
-        'restUrl' => rest_url( 'hate-speech-analyzer/v1/analyze' ),
+        'restUrl' => rest_url( 'hate-speech-barometer/v1/analyze' ),
         'nonce'   => wp_create_nonce( 'wp_rest' ),
     ] );
 }
@@ -85,8 +85,8 @@ add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_frontend_assets' );
  * @return string Rendered HTML.
  */
 function render_block( array $attributes ): string {
-    $placeholder = esc_html__( 'Enter a Facebook post URL…', 'hate-speech-analyzer' );
-    $button_label = esc_html__( 'Analyze', 'hate-speech-analyzer' );
+    $placeholder = esc_html__( 'Enter a Facebook post URL…', 'hate-speech-barometer' );
+    $button_label = esc_html__( 'Analyze', 'hate-speech-barometer' );
 
     return sprintf(
         '<div class="aha-block wp-block-dmorbidi-hate-analyzer" data-nonce="%s">
@@ -125,11 +125,11 @@ function render_block( array $attributes ): string {
         $placeholder,
         $placeholder,
         $button_label,
-        esc_html__( 'Hate speech distribution pie chart', 'hate-speech-analyzer' ),
-        esc_html__( 'Category', 'hate-speech-analyzer' ),
-        esc_html__( 'Comments', 'hate-speech-analyzer' ),
-        esc_html__( 'Total Impact', 'hate-speech-analyzer' ),
-        esc_html__( 'Avg Impact', 'hate-speech-analyzer' ),
-        esc_html__( 'Analyzing comments…', 'hate-speech-analyzer' )
+        esc_html__( 'Hate speech distribution pie chart', 'hate-speech-barometer' ),
+        esc_html__( 'Category', 'hate-speech-barometer' ),
+        esc_html__( 'Comments', 'hate-speech-barometer' ),
+        esc_html__( 'Total Impact', 'hate-speech-barometer' ),
+        esc_html__( 'Avg Impact', 'hate-speech-barometer' ),
+        esc_html__( 'Analyzing comments…', 'hate-speech-barometer' )
     );
 }

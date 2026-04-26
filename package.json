@@ -1,5 +1,5 @@
 {
-    "name": "hate-speech-analyzer",
+    "name": "hate-speech-barometer",
     "version": "1.0.0",
     "description": "Gutenberg block that analyses hate speech in Facebook post comments.",
     "author": "Dario Morbidi <https://github.com/dmorbidi>",

@@ -3,7 +3,7 @@
 ─────────────────────────
 Recupera i commenti di un post Facebook tramite Apify.
 
-MODALITÀ TEST:  imposta AHA_TEST_MODE=1
+MODALITÀ TEST:  imposta HSB_TEST_MODE=1
                 Legge il file JSON locale invece di chiamare Apify.
 
 MODALITÀ PROD:  richiede la variabile d'ambiente APIFY_TOKEN.
@@ -35,25 +35,25 @@ def run(post_url: str) -> list:
     """
     Recupera i commenti del post Facebook indicato.
 
-    In modalità test (AHA_TEST_MODE=1) legge da file locale.
+    In modalità test (HSB_TEST_MODE=1) legge da file locale.
     In modalità produzione chiama l'API Apify.
 
     Returns:
         Lista di dict con chiavi: postTitle, text, likesCount, facebookUrl
     """
-    if os.getenv("HSA_TEST_MODE") == "1":
+    if os.getenv("HSB_TEST_MODE") == "1":
         return _load_from_file()
     return _fetch_from_apify(post_url)
 
 
 def _load_from_file() -> list:
     """Carica i commenti dal file JSON locale (modalità test)."""
-    test_file = Path(os.getenv("HSA_TEST_FILE", DEFAULT_TEST_FILE))
+    test_file = Path(os.getenv("HSB_TEST_FILE", DEFAULT_TEST_FILE))
 
     if not test_file.exists():
         raise FileNotFoundError(
             f"File di test non trovato: {test_file}\n"
-            f"Imposta HSA_TEST_FILE con il percorso corretto."
+            f"Imposta HSB_TEST_FILE con il percorso corretto."
         )
 
     with open(test_file, encoding="utf-8") as f:

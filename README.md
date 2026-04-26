@@ -31,8 +31,8 @@ This tool retrieves and processes publicly available Facebook comments. Comments
 
 ```bash
 cd wp-content/plugins/
-git clone https://github.com/dmorbidi/hate-speech-analyzer
-cd hate-speech-analyzer
+git clone https://github.com/dmorbidi/hate-speech-barometer
+cd hate-speech-barometer
 ```
 
 ### 2. Build the Gutenberg block
@@ -68,11 +68,11 @@ export APIFY_TOKEN="your_apify_token_here"
 
 # Test mode — set to "1" to use a local JSON file instead of calling Apify
 # Recommended during development to avoid unnecessary API calls
-export HSA_TEST_MODE="1"
+export HSB_TEST_MODE="1"
 
 # Path to the local test JSON file (optional)
 # Default: scripts/estrazione_amnesty.json
-export HSA_TEST_FILE="/path/to/your/anonymized_file.json"
+export HSB_TEST_FILE="/path/to/your/anonymized_file.json"
 ```
 
 > **Security:** never commit your Apify token to the repository.
@@ -111,8 +111,8 @@ cd scripts/
 source venv/bin/activate
 
 # Test scraping (test mode — no Apify calls)
-export HSA_TEST_MODE=1
-export HSA_TEST_FILE=/path/to/anonymized_file.json
+export HSB_TEST_MODE=1
+export HSB_TEST_FILE=/path/to/anonymized_file.json
 python3 1_fb_comments_scraping.py "https://www.facebook.com/.../posts/..."
 
 # Test classification
