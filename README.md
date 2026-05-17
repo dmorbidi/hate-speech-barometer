@@ -70,7 +70,7 @@ pip install -r requirements.txt
 
 > **Note on the venv:** Never commit the `venv/` folder — it is already in `.gitignore`. Each user must recreate it locally after cloning.
 
-### 4. Configure environment variables for local testing
+### 4. Configure environment variables for local testing (optional)
 
 Add the following to your environment (`~/.bashrc`, `~/.zshrc`, or `wp-config.php`):
 
