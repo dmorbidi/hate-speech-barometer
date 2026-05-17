@@ -153,9 +153,6 @@ python3 1_fb_comments_scraping.py "https://www.facebook.com/.../posts/..."
 # Test classification
 python3 2_comments_hate_analysis.py anonymized_dataset_sample.json
 
-# Test KPI calculation
-python3 3_post_hate_evaluation.py analisi_odio_con_consenso.csv
-
 # Full pipeline test
 python3 analyze.py "https://www.facebook.com/.../posts/..."
 ```
