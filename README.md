@@ -1,6 +1,6 @@
 # Hate Speech Barometer
 
-A WordPress plugin that adds a Gutenberg block for analysing hate speech in Facebook post comments. Developed and tested with the [Humanity Theme](https://github.com/amnestywebsite/humanity-theme), an open source WordPress theme designed for human rights organizations. Compatible with any WordPress theme.
+A WordPress plugin that adds a Gutenberg block for analyzing hate speech in Facebook post comments. Developed and tested with the [Humanity Theme](https://github.com/amnestywebsite/humanity-theme), an open source WordPress theme designed for human rights organizations. Compatible with any WordPress theme.
 
 > **Note:** This is an independent open-source proof-of-concept developed by a volunteer engaged in online hate speech monitoring. It is not affiliated with any organization.
 
