@@ -68,7 +68,8 @@ def run(comments: list) -> pd.DataFrame:
     print("Classifying comments...", file=sys.stderr)
 
     def analizza(testo):
-        res = hate_classifier(str(testo))[0]
+        # res = hate_classifier(str(testo))[0]
+        res = hate_classifier(str(testo), truncation=True, max_length=512)[0]
         return pd.Series([LABEL_MAP.get(res["label"]), res["score"]])
 
     df[["categoria", "confidenza"]] = df["text"].apply(analizza)
