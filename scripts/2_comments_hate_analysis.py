@@ -18,7 +18,7 @@ import sys
 import os
 from pathlib import Path
 import pandas as pd
-from transformers import pipeline
+from transformers import pipeline, AutoTokenizer
 
 # Persistent cache for the HuggingFace model.
 # Points to scripts/.cache/ — works both on Ubuntu and inside the Devilbox container.
@@ -62,14 +62,17 @@ def run(comments: list) -> pd.DataFrame:
     hate_classifier = pipeline(
         "text-classification",
         model=MODEL_ID,
-        truncation=True,
+        tokenizer=tokenizer,
     )
 
     print("Classifying comments...", file=sys.stderr)
 
     def analizza(testo):
-        # res = hate_classifier(str(testo))[0]
-        res = hate_classifier(str(testo), truncation=True, max_length=512)[0]
+        testo_troncato = tokenizer.decode(
+            tokenizer.encode(str(testo), max_length=512, truncation=True),
+            skip_special_tokens=True
+        )
+        res = hate_classifier(testo_troncato)[0]
         return pd.Series([LABEL_MAP.get(res["label"]), res["score"]])
 
     df[["categoria", "confidenza"]] = df["text"].apply(analizza)
