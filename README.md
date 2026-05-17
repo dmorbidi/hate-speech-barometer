@@ -220,7 +220,7 @@ This is a proof-of-concept prototype. The following limitations are acknowledged
 
 - **AI model accuracy** — The model (`IMSyPP/hate_speech_it`) was trained on general Italian social media content. Its accuracy on human rights specific discourse may be limited. *Solvable via fine-tuning on a domain-specific labeled dataset, which HuggingFace fully supports.*
 
-- **Production scalability** — Many of the above limitations dissolve with a modest production budget: a Flask microservice on Railway or Render (~$7/month), HuggingFace Pro for reliable inference (~$9/month), and a standard WordPress hosting plan would yield a fully functional, scalable tool.
+- **Production scalability** — Many of the above limitations dissolve with a modest production budget: a Flask microservice on Railway or Render (approx. $7/month), HuggingFace Pro for reliable inference (approx. $9/month), and a standard WordPress hosting plan would yield a fully functional, scalable tool.
 
 ---
 
