@@ -70,7 +70,7 @@ pip install -r requirements.txt
 
 > **Note on the venv:** Never commit the `venv/` folder — it is already in `.gitignore`. Each user must recreate it locally after cloning.
 
-### 4. Configure environment variables
+### 4. Configure environment variables for local testing
 
 Add the following to your environment (`~/.bashrc`, `~/.zshrc`, or `wp-config.php`):
 
@@ -107,7 +107,7 @@ Go to **WP Admin → Network Admin → Plugins** and activate *Hate Speech Barom
 
 ### Demo mode vs Live mode
 
-The tool supports two operating modes, controlled via environment variables in `wp-config.php`:
+The same variables set for local testing can be set in `wp-config.php` when running the tool through WordPress. The tool supports two operating modes:
 
 **Demo mode** (no Apify calls — uses local dataset):
 ```php
