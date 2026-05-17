@@ -72,7 +72,7 @@ pip install -r requirements.txt
 
 ### 4. Configure environment variables for local testing (optional)
 
-Add the following to your environment (`~/.bashrc`, `~/.zshrc`, or `wp-config.php`):
+If you want to test the Python scripts locally (see the "Python Pipeline" section), add the following to your environment (`~/.bashrc`, `~/.zshrc`):
 
 ```bash
 # Apify token — required in production mode
