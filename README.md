@@ -17,6 +17,16 @@ This tool retrieves and processes publicly available Facebook comments. Comments
 
 ---
 
+## Demo
+
+The demo below shows the tool analyzing a real public Facebook post and returning its hate-speech classification results.
+
+https://github.com/user-attachments/assets/c1da500d-2e71-4074-9afb-9015be1ddbd2
+
+
+
+---
+
 ## Requirements
 
 - WordPress 6.4+
